@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+import argparse
+import sys
+from nucle.cmd import commands
+from nucle import __version__ as VERSION 
+def ParseArg():
+    ''' This Function Parse the Argument '''
+    p=argparse.ArgumentParser( description = 'nuclehss', epilog='')
+    p.add_argument('-v','--version',action='version',version='%(prog)s '+VERSION)
+    subs=p.add_subparsers(help="subcommand help",dest="sub")
+    for i in commands.keys():
+        pi=subs.add_parser(i,help=commands[i].help())
+        commands[i].set_parser(pi)
+    if len(sys.argv)==1:
+        p.print_help()
+        exit(0)
+    if len(sys.argv)==2:
+        sys.stderr.write(p.parse_args([sys.argv[1],'--help']))
+        exit(0)
+    return p.parse_args()
+def main():
+    args=ParseArg()
+    if args.sub in commands:
+        commands[args.sub].run(args)
+if __name__=="__main__":
+    main()
