@@ -44,12 +44,12 @@ metadata = {
                    "bin/nucle",
                    ],
           'package_data':{"":["README.md"]},
-          'install_requires':['h5py>=2.9.0'],
+          'install_requires':['h5py>=2.9.0','gunicorn>=19.9.0','falcon>=2.0.0'],
 }
 
 def main():
-    if not float(sys.version[:3])>2.4:
-        sys.stderr.write("CRITICAL: Python version must be greater than or equal to 2.4!")
+    if not float(sys.version[:3])>3.5:
+        sys.stderr.write("CRITICAL: Python version must be greater than or equal to 3.5!")
         sys.exit(1)
     dist=setup(**metadata)
 
