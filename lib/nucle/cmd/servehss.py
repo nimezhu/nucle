@@ -15,6 +15,9 @@ import argparse
 import gunicorn.app.base
 
 from gunicorn.six import iteritems
+from falcon_cors import CORS
+
+cors = CORS(allow_origins_list=['http://vis.nucleome.org','https://vis.nucleome.org','http://x7.andrew.cmu.edu:8080'])
 
 def help():
     return "hss to microservice[TODO]"
@@ -100,7 +103,7 @@ class nucle3d(object):
     def on_get(self,req,resp,i):
         resp.status = falcon.HTTP_200  # This is the default status
         ## coords[i][cell][dimension]
-        resp.append_header('Access-Control-Allow-Origin', 'http://x7.andrew.cmu.edu:8080')
+        ## resp.append_header('Access-Control-Allow-Origin', 'http://x7.andrew.cmu.edu:8080')
         resp.append_header('Access-Control-Allow-Credentials', 'true')
         buf = StringIO()
         buf.write("TITLE\t%d\n" % i)
@@ -124,7 +127,8 @@ class nucle3d(object):
 # falcon API Generate
 
 def generateApp(filename):
-    app = falcon.API()
+    #app = falcon.API()
+    app = falcon.API(middleware=[cors.middleware])
     db = h5py.File(filename, 'r')
     serv = Genome(db)
     coords = np.transpose(db['coordinates'][:],(1,0,2))

@@ -44,7 +44,7 @@ metadata = {
                    "bin/nucle",
                    ],
           'package_data':{"":["README.md"]},
-          'install_requires':['h5py>=2.9.0','gunicorn>=19.9.0','falcon>=2.0.0'],
+          'install_requires':['h5py>=2.9.0','gunicorn>=19.9.0','falcon>=2.0.0','falcon-cors>=1.1.7'],
 }
 
 def main():
