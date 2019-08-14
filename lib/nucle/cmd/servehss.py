@@ -16,8 +16,8 @@ import gunicorn.app.base
 
 from gunicorn.six import iteritems
 from falcon_cors import CORS
-
-cors = CORS(allow_origins_list=['http://vis.nucleome.org','https://vis.nucleome.org','http://x7.andrew.cmu.edu:8080'])
+lis = ['http://vis.nucleome.org','https://vis.nucleome.org','http://x7.andrew.cmu.edu:8080']
+cors = CORS(allow_credentials_origins_list = lis,allow_origins_list= lis)
 
 def help():
     return "hss to microservice[TODO]"
@@ -104,7 +104,7 @@ class nucle3d(object):
         resp.status = falcon.HTTP_200  # This is the default status
         ## coords[i][cell][dimension]
         ## resp.append_header('Access-Control-Allow-Origin', 'http://x7.andrew.cmu.edu:8080')
-        resp.append_header('Access-Control-Allow-Credentials', 'true')
+        ## resp.append_header('Access-Control-Allow-Credentials', 'true')
         buf = StringIO()
         buf.write("TITLE\t%d\n" % i)
         buf.write("GENOME\t%s\n" % self.assembly)
