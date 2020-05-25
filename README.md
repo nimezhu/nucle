@@ -1,5 +1,13 @@
 # Nucleome Tools
+
 ## Python version: nucle
+### install
+Download this repository. And then 
+```
+cd nucle 
+python3 setup.py install
+```
+### Usage 
 Python tools for nucleome browser.
 
 include following functions:
