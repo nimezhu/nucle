@@ -5,7 +5,7 @@ from nucle.cmd import commands
 from nucle import __version__ as VERSION 
 def ParseArg():
     ''' This Function Parse the Argument '''
-    p=argparse.ArgumentParser( description = 'nuclehss', epilog='')
+    p=argparse.ArgumentParser( description = 'python tools for nucleome browser', epilog='')
     p.add_argument('-v','--version',action='version',version='%(prog)s '+VERSION)
     subs=p.add_subparsers(help="subcommand help",dest="sub")
     for i in commands.keys():

@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # Programmer : zhuxp
-
-
 from __future__ import print_function
 from distutils.core import setup
 from setuptools import setup, find_packages
@@ -13,7 +11,6 @@ import re
 here = os.path.abspath(os.path.dirname(__file__))
 
 def read(*parts):
-    # intentionally *not* adding an encoding option to open
         return codecs.open(os.path.join(here, *parts), 'r').read()
 
 def find_version(*file_paths):
@@ -56,7 +53,7 @@ def main():
 
 
 
-    
+
 if __name__=="__main__":
     main()
 

@@ -1,7 +1,7 @@
 import h5py
 
 def help():
-    return "get basic info about hss file "
+    return "output basic info about hss file "
 def set_parser(p):
     p.add_argument('-i','--input',dest='input',default='stdin',type=str,help="input file Default: %(default)s")
 def run(args):

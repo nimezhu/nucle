@@ -20,7 +20,7 @@ lis = ['http://vis.nucleome.org','https://vis.nucleome.org','http://x7.andrew.cm
 cors = CORS(allow_credentials_origins_list = lis,allow_origins_list= lis)
 
 def help():
-    return "hss to microservice[TODO]"
+    return "host a hss file as web data service"
 def set_parser(p):
     p.add_argument('-i','--input',dest='input',default='stdin',type=str,help="input file Default: %(default)s")
     p.add_argument('-p','--port',dest='port',default=8586,type=int,help="port Default: %(default)s")
@@ -141,7 +141,6 @@ def run(args):
     if args.a:
         bindserver = "0.0.0.0"
     options = {
-        #'bind': '%s:%d' % ('127.0.0.1', args.port),
         'bind': '%s:%d' % (bindserver, args.port),
         'workers': 1,
     }

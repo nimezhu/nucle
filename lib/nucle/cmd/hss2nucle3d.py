@@ -4,7 +4,7 @@ import numpy as np
 from nucle.nucle3d import hssreader
 
 def help():
-    return "extract structures in hss file into nucle3d files"
+    return "extract a structure in a hss file and output it as nucle3d format"
 def set_parser(p):
     p.add_argument('-i','--input',dest='input',default='stdin',type=str,help="input file Default: %(default)s")
     p.add_argument('-n',dest='n',default=1,type=int,help="output nth structure Default: %(default)s")
