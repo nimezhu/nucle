@@ -1,16 +1,19 @@
 import h5py
+from io import StringIO
+import numpy as np
+from nucle.nucle3d import hssreader
 
 def help():
-    return "get basic info about hss file "
+    return "extract structures in hss file into nucle3d files"
 def set_parser(p):
     p.add_argument('-i','--input',dest='input',default='stdin',type=str,help="input file Default: %(default)s")
+    p.add_argument('-n',dest='n',default=1,type=int,help="output nth structure Default: %(default)s")
 def run(args):
     h5f = h5py.File(args.input, 'r')
-    genome = h5f['genome']['assembly'][...]
-    print("Genome Version:", genome)
+    n = hssreader(h5f)
+    i = args.n
+    print(n.output(i-1))
     h5f.close()
-
-
 
 if __name__=="__main__":
     if len(sys.argv)==1:

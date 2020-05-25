@@ -1,11 +1,10 @@
-
 import falcon
 import h5py
 import json
 import numpy as np
 import sys
 
-from io import StringIO 
+from io import StringIO
 # Falcon follows the REST architectural style, meaning (among
 # other things) that you think in terms of resources and state
 # transitions, which map to HTTP verbs.
@@ -16,14 +15,16 @@ import gunicorn.app.base
 
 from gunicorn.six import iteritems
 from falcon_cors import CORS
+from nucle.nucle3d import hssreader
 lis = ['http://vis.nucleome.org','https://vis.nucleome.org','http://x7.andrew.cmu.edu:8080']
 cors = CORS(allow_credentials_origins_list = lis,allow_origins_list= lis)
 
 def help():
     return "hss to microservice[TODO]"
 def set_parser(p):
-    p.add_argument('-i','--input',dest='input',default='stdin',type=str,help="input file Default: %(default)s")   
-    p.add_argument('-p','--port',dest='port',default=8586,type=int,help="port Default: %(default)s")   
+    p.add_argument('-i','--input',dest='input',default='stdin',type=str,help="input file Default: %(default)s")
+    p.add_argument('-p','--port',dest='port',default=8586,type=int,help="port Default: %(default)s")
+    p.add_argument('-a',dest='a',default=False,type=bool,help="open to 0.0.0.0 : %{default}s")
 class Genome(object):
     def __init__(self, db):
         self.db = db
@@ -80,50 +81,6 @@ class IArray(object):
         resp.body=(buf.getvalue())
 
 
-class nucle3d(object):
-    def __init__(self,db):
-        self.db = db
-        self.coords = np.transpose(db['coordinates'][:],(1,0,2))
-        genome = db['genome']
-        assembly = genome["assembly"][...]
-        self.assembly = str(assembly)
-        self.chroms = genome['chroms'][:]
-        origins = genome['origins'][:]
-        lengths = genome['lengths'][:]
-
-        index = db['index']
-        iChrom = index['chrom'][:]
-        self.chromSizes = index['chrom_sizes'][:]
-        iStart = index['start'][:]
-        iEnd = index['end'][:]
-        
-        self.res = iEnd[2] - iStart[2]  # TODO
-
-
-    def on_get(self,req,resp,i):
-        resp.status = falcon.HTTP_200  # This is the default status
-        ## coords[i][cell][dimension]
-        ## resp.append_header('Access-Control-Allow-Origin', 'http://x7.andrew.cmu.edu:8080')
-        ## resp.append_header('Access-Control-Allow-Credentials', 'true')
-        buf = StringIO()
-        buf.write("TITLE\t%d\n" % i)
-        buf.write("GENOME\t%s\n" % self.assembly)
-        buf.write("BINSIZE\t%d\n" % self.res)
-        k=0
-        for i0,st in enumerate(self.chroms):
-            buf.write("CHR\t")
-            buf.write("%s\n"%str(st.decode("ascii")))
-            for j in range(self.chromSizes[i0]):
-                st = self.coords[i][k]
-                buf.write("%d,%.2f,%.2f,%.2f\n" % (j,st[0],st[1],st[2]))
-                k+=1
-        resp.body = (buf.getvalue())
-
-
-
-
-
-
 # falcon API Generate
 
 def generateApp(filename):
@@ -157,13 +114,13 @@ def generateApp(filename):
     iEnd = index['end'][:]
     app.add_route("/index/end",IArray(iEnd))
 
-    app.add_route("/nucle3d/{i:int}",nucle3d(db))
+    app.add_route("/nucle3d/{i:int}",hssreader(db))
 
 
     return app
 
 class StandaloneApplication(gunicorn.app.base.BaseApplication):
-    
+
     def __init__(self, app, options=None):
         self.options = options or {}
         self.application = app
@@ -180,8 +137,12 @@ class StandaloneApplication(gunicorn.app.base.BaseApplication):
 
 def run(args):
     app = generateApp(args.input)
+    bindserver = "127.0.0.1"
+    if args.a:
+        bindserver = "0.0.0.0"
     options = {
-        'bind': '%s:%d' % ('127.0.0.1', args.port),
+        #'bind': '%s:%d' % ('127.0.0.1', args.port),
+        'bind': '%s:%d' % (bindserver, args.port),
         'workers': 1,
     }
     StandaloneApplication(app, options).run()
