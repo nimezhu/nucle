@@ -3,7 +3,6 @@
 Python tools for nucleome browser.
 
 include following functions:
-
 ```
 usage: nucle [-h] [-v]
              {hssinfo,servehss,cmm2nucle3d,hss2nucle3d,createdatasheet} ...
@@ -14,9 +13,9 @@ positional arguments:
   {hssinfo,servehss,cmm2nucle3d,hss2nucle3d,createdatasheet}
                         subcommand help
     hssinfo             output basic info about hss file
-    servehss            hss to microservice[TODO]
+    servehss            host a hss file as web data service
     cmm2nucle3d         convert cmm format to nucle3d format
-    hss2nucle3d         extract a structure in hss file and output it to
+    hss2nucle3d         extract a structure in a hss file and output it as
                         nucle3d format
     createdatasheet     download data from 4DN data portal and prepare a input
                         data sheet for nucleserver
