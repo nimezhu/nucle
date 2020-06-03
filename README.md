@@ -38,7 +38,14 @@ nucle3d format is used in Nucleome Browser Chromosome 3D Structure viewer web co
 Generate a nucle3d format file and put it in a web server 
 make sure that the URL can accessed by "http(s)://vis.nucleome.org"  
 (set its header "CORS").
-Then, input the file URL in Nucleome Browser Chromosome 3D Structure viewer.
+We provide a command tool to start a simple web server with CORS Header. 
+For example , if you have a nucle3d format file /home/yourname/data/file.nucle3d.
+you can start a file web server using our tool [nucleserver](https://github.com/nucleome/nucleserver)
+```
+nucleserver file -r /home/yourname/data 
+```
+It will start a server http://127.0.0.1:8611 and the nucle3d file url will be http://127.0.0.1:8611/get/file.nucle3d.
+Then, input this file URL in Nucleome Browser Chromosome 3D Structure viewer. The 3D structure will be shown in this panel.
 
 version 0.0.1
 ```
